@@ -3,6 +3,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 
 public class Client {
@@ -22,6 +23,14 @@ public class Client {
     Socket clientSocket = new Socket(this.host, this.port);
     System.out.println("Conectado com sucesso!");
     new Thread().start();
+    Scanner scanner = new Scanner(System.in);
+    PrintStream ps = new PrintStream(clientSocket.getOutputStream());
+    while (scanner.hasNextLine()) {
+      ps.println(scanner.nextLine());
+    }
+    ps.close();
+    scanner.close();
+    clientSocket.close();
   }
 
 }
