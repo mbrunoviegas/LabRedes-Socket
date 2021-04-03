@@ -10,9 +10,11 @@ public class Account {
   public int getId() {
     return this.id;
   }
+
   public float getBalance() {
     return this.balance;
   }
+
   public void setBalance(float balance) {
     this.balance = balance;
   }

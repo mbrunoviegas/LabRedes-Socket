@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Receiver implements Runnable {
   private InputStream server;
-  
+
   public Receiver(InputStream server) {
     this.server = server;
   }

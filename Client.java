@@ -14,16 +14,16 @@ public class Client {
     this.host = host;
     this.port = port;
   }
-  
-  public static void main(String[]args) throws UnknownHostException, IOException {
+
+  public static void main(String[] args) throws UnknownHostException, IOException {
     // dispara client
     new Client("127.0.0.1", 12345).executa();
   }
 
-  public void executa() throws UnknownHostException, IOException {     
-    Socket client = new Socket(this.host, this.port);     
+  public void executa() throws UnknownHostException, IOException {
+    Socket client = new Socket(this.host, this.port);
     System.out.println("Conectado com sucesso. Bem-vindo ao seu banco!");
-    
+
     // thread para receber mensagens do servidor
     Receiver r = new Receiver(client.getInputStream());
     new Thread(r).start();
@@ -48,31 +48,31 @@ public class Client {
 
     while (option != 0 && keyboard.hasNextLine()) {
       switch (option) {
-        case SALDO:
-          mensagem = "1";
+      case SALDO:
+        mensagem = "1";
         break;
 
-        case DEPOSITO:
-          System.out.print("Por favor, digite o valor a ser depositado: ");
-          amount = keyboard.nextFloat();
-          mensagem = "2;"+amount;
+      case DEPOSITO:
+        System.out.print("Por favor, digite o valor a ser depositado: ");
+        amount = keyboard.nextFloat();
+        mensagem = "2;" + amount;
         break;
 
-        case SAQUE:
-          sendToServer.println("1"); // verificar o saldo
-          // saldo = retorno do servidor
-          System.out.println("Seu saldo é de R$ " + saldo + ".");
+      case SAQUE:
+        sendToServer.println("1"); // verificar o saldo
+        // saldo = retorno do servidor
+        System.out.println("Seu saldo é de R$ " + saldo + ".");
 
-          System.out.print("Por favor, digite o valor a ser retirado: ");
+        System.out.print("Por favor, digite o valor a ser retirado: ");
+        amount = keyboard.nextFloat();
+
+        while (amount > saldo) {
+          System.out.println("Saldo insuficiente.");
+          System.out.print("Por favor, digite novamente: ");
           amount = keyboard.nextFloat();
+        }
 
-          while (amount > saldo) {
-            System.out.println("Saldo insuficiente.");
-            System.out.print("Por favor, digite novamente: ");
-            amount = keyboard.nextFloat();
-          }
-
-          mensagem = "3;"+amount;
+        mensagem = "3;" + amount;
         break;
       }
 
@@ -80,8 +80,7 @@ public class Client {
 
       try {
         Thread.sleep(1000);
-      }
-      catch (InterruptedException ie) {
+      } catch (InterruptedException ie) {
       }
 
       System.out.print(menu);

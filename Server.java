@@ -19,7 +19,7 @@ public class Server {
   public void executa() throws IOException {
     ServerSocket server = new ServerSocket(this.port);
     System.out.println("Servidor iniciado com sucesso. Porta 12345 aberta.");
-    
+
     while (true) {
       // aceita um cliente
       Socket client = server.accept();

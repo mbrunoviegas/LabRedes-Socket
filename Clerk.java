@@ -29,17 +29,17 @@ public class Clerk implements Runnable {
       payload = messageFromClient.split(";");
 
       switch (payload[0]) {
-        case SALDO:
+      case SALDO:
         break;
 
-        case DEPOSITO:
-          amount = Float.parseFloat(payload[1]);
-          this.account.setBalance(this.account.getBalance() + amount);
+      case DEPOSITO:
+        amount = Float.parseFloat(payload[1]);
+        this.account.setBalance(this.account.getBalance() + amount);
         break;
 
-        case SAQUE:
-          amount = Float.parseFloat(payload[1]);
-          this.account.setBalance(this.account.getBalance() - amount);
+      case SAQUE:
+        amount = Float.parseFloat(payload[1]);
+        this.account.setBalance(this.account.getBalance() - amount);
         break;
       }
 
