@@ -3,57 +3,42 @@ import java.net.*;
 import java.util.*;
 
 public class Server {
+  private int port;
+  private HashMap<Integer, PrintStream> clientsMap;
+
+  public Server(int port) {
+    this.port = port;
+    this.clientsMap = new HashMap<Integer, PrintStream>();
+  }
 
   public static void main(String[] args) throws IOException {
-    // inicia o server
+    // inicia o servidor
     new Server(12345).executa();
   }
 
-  private int porta;
-  private List<PrintStream> clientes;
-
-  public Server(int porta) {
-    this.porta = porta;
-    this.clientes = new ArrayList<PrintStream>();
-  }
-
   public void executa() throws IOException {
-    ServerSocket server = new ServerSocket(this.porta);
-    System.out.println("Porta 12345 aberta!");
+    ServerSocket server = new ServerSocket(this.port);
+    System.out.println("Servidor iniciado com sucesso. Porta 12345 aberta.");
+    
     while (true) {
-      // aceita um client
+      // aceita um cliente
       Socket client = server.accept();
 
-      // cadastrar o client no banco
+      // cadastra o cliente
       Account account = new Account(client.getPort());
+      System.out.println("Cliente conectado com sucesso (porta " + client.getPort() + ").");
 
-      System.out.println(
-        "Client cadastrado com sucesso!" +
-        client.getInetAddress().getHostAddress()
-      );
       // adiciona saida do client à lista
       PrintStream ps = new PrintStream(client.getOutputStream());
-      this.clientes.add(ps);
-      // cria tratador de client numa nova thread
-      TrataCliente tc = new TrataCliente(client.getInputStream(), this);
-      new Thread(tc).start();
+      this.clientsMap.put(account.getId(), ps);
+
+      // cria um atendente para o cliente numa nova thread
+      Clerk clerk = new Clerk(account, client.getInputStream(), this);
+      new Thread(clerk).start();
     }
   }
 
-  public void distribuiMensagem(String msg) {
-    // envia msg para todo mundo
-    for (PrintStream client : this.clientes) {
-      client.println(msg);
-    }
+  public void sendMessage(int id, String msg) {
+    this.clientsMap.get(id).println(msg);
   }
-}
-
-class Account {
-    int id;
-    double balance;
-
-    public Account(int id) {
-      this.id = id;
-      this.balance = 0;
-    }
 }
