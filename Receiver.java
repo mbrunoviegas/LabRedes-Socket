@@ -18,17 +18,18 @@ public class Receiver implements Runnable {
       messageFromServer = scanner.nextLine();
       payload = messageFromServer.split(";");
 
-      if (Integer.parseInt(payload[0]) == 9) { // transferencia
-        System.out.println("\n\n" + payload[1]);
+      if (Integer.parseInt(payload[0]) == 9) // transferencia
+        System.out.print("\n\n" + payload[1] + "\nSeu novo saldo e de: R$ " + payload[2] + "\n\nSua opcao: ");
+      else {
+        if (Integer.parseInt(payload[0]) != 1) { // não é uma operação de saldo
+          if (Integer.parseInt(payload[1]) == 1) // sucesso
+            System.out.println("\nOperacao realizada com sucesso.");
+          else
+            System.out.println("\nFalha na operacao. " + payload[3]);
+        }
+  
+        System.out.println("Seu saldo e de: R$ " + payload[2]);
       }
-      else if (Integer.parseInt(payload[0]) != 1) { // não é uma operação de saldo
-        if (Integer.parseInt(payload[1]) == 1) // sucesso
-          System.out.println("\nOperacao realizada com sucesso.");
-        else
-          System.out.println("\nFalha na operacao. " + payload[3]);
-      }
-
-      System.out.println("Seu saldo e de: R$ " + payload[2]);
     }
 
     scanner.close();
