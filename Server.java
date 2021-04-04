@@ -51,6 +51,6 @@ public class Server {
 
   public void transfer (int id, float amount) {
     this.accountsMap.get(id).setBalance(this.accountsMap.get(id).getBalance() + amount);
-    this.sendMessage(id, "9;\n\nTransferencia recebida com o valor de R$ " + amount + ".;" + this.accountsMap.get(id).getBalance());
+    this.sendMessage(id, "9;Transferencia recebida com o valor de R$ " + amount + ".;" + this.accountsMap.get(id).getBalance());
   }
 }

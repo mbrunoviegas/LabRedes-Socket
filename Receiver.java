@@ -19,7 +19,7 @@ public class Receiver implements Runnable {
       payload = messageFromServer.split(";");
 
       if (Integer.parseInt(payload[0]) == 9) { // transferencia
-        System.out.println(payload[1]);
+        System.out.println("\n\n" + payload[1]);
       }
       else if (Integer.parseInt(payload[0]) != 1) { // não é uma operação de saldo
         if (Integer.parseInt(payload[1]) == 1) // sucesso
