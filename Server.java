@@ -5,10 +5,12 @@ import java.util.*;
 public class Server {
   private int port;
   private HashMap<Integer, PrintStream> clientsMap;
+  private HashMap<Integer, Account> accountsMap;
 
   public Server(int port) {
     this.port = port;
     this.clientsMap = new HashMap<Integer, PrintStream>();
+    this.accountsMap = new HashMap<Integer, Account>();
   }
 
   public static void main(String[] args) throws IOException {
@@ -18,7 +20,7 @@ public class Server {
 
   public void executa() throws IOException {
     ServerSocket server = new ServerSocket(this.port);
-    System.out.println("Servidor iniciado com sucesso. Porta 12345 aberta.");
+    System.out.println("Servidor iniciado com sucesso.\n");
 
     while (true) {
       // aceita um cliente
@@ -26,7 +28,8 @@ public class Server {
 
       // cadastra o cliente
       Account account = new Account(client.getPort());
-      System.out.println("Cliente conectado com sucesso (porta " + client.getPort() + ").");
+      this.accountsMap.put(account.getId(), account);
+      System.out.println("Cliente conectado com sucesso (conta " + client.getPort() + ").");
 
       // adiciona saida do client à lista
       PrintStream ps = new PrintStream(client.getOutputStream());
@@ -40,5 +43,14 @@ public class Server {
 
   public void sendMessage(int id, String msg) {
     this.clientsMap.get(id).println(msg);
+  }
+
+  public boolean existAccount(int id) {
+    return this.accountsMap.get(id) != null;
+  }
+
+  public void transfer (int id, float amount) {
+    this.accountsMap.get(id).setBalance(this.accountsMap.get(id).getBalance() + amount);
+    this.sendMessage(id, "9;\n\nTransferencia recebida com o valor de R$ " + amount + ".;" + this.accountsMap.get(id).getBalance());
   }
 }
